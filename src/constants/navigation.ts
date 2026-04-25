@@ -11,12 +11,12 @@ export const NAV_LINKS: NavLink[] = [
 export const SOCIAL_LINKS: SocialLink[] = [
   {
     label: "GitHub",
-    href: "https://github.com",
+    href: "https://github.com/erickpwg",
     icon: "github",
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com",
+    href: "www.linkedin.com/in/erick-wagner-",
     icon: "linkedin",
   },
 ];
