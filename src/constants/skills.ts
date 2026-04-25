@@ -1,31 +1,47 @@
 import type { SkillCategory } from "@/types";
 
+export const CORE_STACK = [
+  "JavaScript (ES6+)",
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+];
+
 export const SKILLS: SkillCategory[] = [
   {
     category: "Frontend",
+    subtitle: "Interfaces & UI",
     items: [
       { name: "React", icon: "react" },
       { name: "Next.js", icon: "nextjs" },
-      { name: "TypeScript", icon: "typescript" },
-      { name: "Tailwind CSS", icon: "tailwind" },
+      { name: "TypeScript", icon: "ts" },
+      { name: "JavaScript (ES6+)", icon: "js" },
+      { name: "Tailwind CSS", icon: "tw" },
+      { name: "Responsive Design", icon: "html" },
     ],
   },
   {
-    category: "Backend",
+    category: "Backend & APIs",
+    subtitle: "Server, Integrations & Data",
     items: [
-      { name: "Node.js", icon: "nodejs" },
-      { name: "Express", icon: "express" },
-      { name: "MongoDB", icon: "mongodb" },
-      { name: "PostgreSQL", icon: "postgresql" },
+      { name: "Node.js", icon: "node" },
+      { name: "Express.js", icon: "exp" },
+      { name: "REST APIs", icon: "api" },
+      { name: "WebSocket", icon: "ws" },
+      { name: "JWT Auth", icon: "jwt" },
+      { name: "MongoDB", icon: "mongo" },
+      { name: "PostgreSQL", icon: "pg" },
     ],
   },
   {
-    category: "Tools & DevOps",
+    category: "Tools & Workflow",
+    subtitle: "DevOps & Productivity",
     items: [
-      { name: "Git", icon: "git" },
-      { name: "Docker", icon: "docker" },
-      { name: "Vercel", icon: "vercel" },
-      { name: "VS Code", icon: "vscode" },
+      { name: "Git & GitHub", icon: "git" },
+      { name: "Docker", icon: "dkr" },
+      { name: "Vercel", icon: "vrcl" },
+      { name: "Postman", icon: "post" },
     ],
   },
 ];

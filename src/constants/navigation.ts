@@ -16,7 +16,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     label: "LinkedIn",
-    href: "www.linkedin.com/in/erick-wagner-",
+    href: "https://www.linkedin.com/in/erick-wagner-",
     icon: "linkedin",
   },
 ];
