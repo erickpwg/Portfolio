@@ -107,10 +107,10 @@ export function Contact() {
               <div>
                 <p className="text-xs text-muted uppercase tracking-wider">Email</p>
                 <a
-                  href="mailto:erickpwagner13@gmail.com"
+                  href="mailto:contact@erickwagner.dev"
                   className="text-sm font-medium text-foreground hover:text-accent transition-colors duration-150"
                 >
-                  erickpwagner13@gmail.com
+                  contact@erickwagner.dev
                 </a>
                 <p className="text-xs text-muted mt-0.5">Typically responds within 24 hours</p>
               </div>
