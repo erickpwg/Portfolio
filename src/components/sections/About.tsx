@@ -44,7 +44,7 @@ export function About() {
               </div>
               <div className="flex items-center gap-2 text-muted">
                 <MailIcon className="w-4 h-4 text-accent shrink-0" />
-                <span>erickpwagner13@gmail.com</span>
+                <span>contact@erickwagner.dev</span>
               </div>
             </div>
 
