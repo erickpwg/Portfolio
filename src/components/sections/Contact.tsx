@@ -17,22 +17,75 @@ type FormState = {
   message: string;
 };
 
+type TouchedState = {
+  name: boolean;
+  email: boolean;
+  message: boolean;
+};
+
 type SubmitStatus = "idle" | "loading" | "success" | "error";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getErrors(form: FormState) {
+  return {
+    name: !form.name.trim() ? "Name is required." : "",
+    email: !form.email.trim()
+      ? "Email is required."
+      : !EMAIL_REGEX.test(form.email)
+      ? "Please enter a valid email address."
+      : "",
+    message: !form.message.trim() ? "Message is required." : "",
+  };
+}
+
+const inputBase =
+  "w-full px-4 py-2.5 rounded-lg bg-surface text-foreground text-sm placeholder:text-muted/50 focus:outline-none transition-colors duration-150 border";
+
+const errorStyle: React.CSSProperties = { borderColor: "#ef4444" };
+const defaultStyle: React.CSSProperties = { borderColor: "var(--border)" };
 
 export function Contact() {
   const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
+  const [touched, setTouched] = useState<TouchedState>({ name: false, email: false, message: false });
   const [status, setStatus] = useState<SubmitStatus>("idle");
+
+  const errors = getErrors(form);
+  const hasErrors = Object.values(errors).some(Boolean);
+
+  const isError = (field: keyof FormState) => touched[field] && !!errors[field];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setTouched({ name: true, email: true, message: true });
+    if (hasErrors) return;
+
     setStatus("loading");
-    await new Promise((res) => setTimeout(res, 1200));
-    setStatus("success");
-    setForm({ name: "", email: "", message: "" });
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error();
+
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" });
+      setTouched({ name: false, email: false, message: false });
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -40,26 +93,26 @@ export function Contact() {
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
           label="Contact"
-          title="Let's work together"
-          description="Have a project in mind or just want to connect? My inbox is always open."
+          title="Let's connect"
+          description="I'm currently open to new opportunities as a Full-Stack or Front-End Developer."
+          description2="Feel free to reach out if you have a role, project, or just want to connect."
         />
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-surface border border-border">
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
-                  <MailIcon className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted uppercase tracking-wider">Email</p>
-                  <a
-                    href="mailto:erickpwagner13@gmail.com"
-                    className="text-sm font-medium text-foreground hover:text-accent transition-colors duration-150"
-                  >
-                    erickpwagner13@gmail.com
-                  </a>
-                </div>
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-surface border border-border">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                <MailIcon className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <p className="text-xs text-muted uppercase tracking-wider">Email</p>
+                <a
+                  href="mailto:erickpwagner13@gmail.com"
+                  className="text-sm font-medium text-foreground hover:text-accent transition-colors duration-150"
+                >
+                  erickpwagner13@gmail.com
+                </a>
+                <p className="text-xs text-muted mt-0.5">Typically responds within 24 hours</p>
               </div>
             </div>
 
@@ -85,7 +138,7 @@ export function Contact() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="name" className="text-xs font-medium text-muted uppercase tracking-wider">
@@ -95,13 +148,18 @@ export function Contact() {
                   id="name"
                   name="name"
                   type="text"
-                  required
                   value={form.name}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="Your name"
-                  className="px-4 py-2.5 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted/50 text-sm focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all duration-150"
+                  style={isError("name") ? errorStyle : defaultStyle}
+                  className={inputBase}
                 />
+                {isError("name") && (
+                  <p className="text-xs text-red-400">{errors.name}</p>
+                )}
               </div>
+
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="email" className="text-xs font-medium text-muted uppercase tracking-wider">
                   Email
@@ -110,12 +168,16 @@ export function Contact() {
                   id="email"
                   name="email"
                   type="email"
-                  required
                   value={form.email}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="your@email.com"
-                  className="px-4 py-2.5 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted/50 text-sm focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all duration-150"
+                  style={isError("email") ? errorStyle : defaultStyle}
+                  className={inputBase}
                 />
+                {isError("email") && (
+                  <p className="text-xs text-red-400">{errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -126,13 +188,17 @@ export function Contact() {
               <textarea
                 id="message"
                 name="message"
-                required
                 rows={5}
                 value={form.message}
                 onChange={handleChange}
-                placeholder="Tell me about your project or idea..."
-                className="px-4 py-2.5 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted/50 text-sm focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all duration-150 resize-none"
+                onBlur={handleBlur}
+                placeholder="Tell me about the opportunity, project, or how I can help..."
+                style={isError("message") ? errorStyle : defaultStyle}
+                className={`${inputBase} resize-none`}
               />
+              {isError("message") && (
+                <p className="text-xs text-red-400">{errors.message}</p>
+              )}
             </div>
 
             <Button
