@@ -5,7 +5,6 @@ import { NAV_LINKS } from "@/constants/navigation";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
@@ -28,13 +27,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [isMenuOpen]);
-
   const handleNavClick = (href: string) => {
-    setIsMenuOpen(false);
     const target = document.querySelector(href);
     target?.scrollIntoView({ behavior: "smooth" });
   };
@@ -75,59 +68,6 @@ export function Header() {
                 {isActive && (
                   <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
                 )}
-              </a>
-            );
-          })}
-        </nav>
-
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-surface-elevated transition-colors duration-200 gap-1.5"
-        >
-          <span
-            className={`block w-5 h-0.5 bg-foreground transition-all duration-300 ${
-              isMenuOpen ? "rotate-45 translate-y-2" : ""
-            }`}
-          />
-          <span
-            className={`block w-5 h-0.5 bg-foreground transition-all duration-300 ${
-              isMenuOpen ? "opacity-0 scale-x-0" : ""
-            }`}
-          />
-          <span
-            className={`block w-5 h-0.5 bg-foreground transition-all duration-300 ${
-              isMenuOpen ? "-rotate-45 -translate-y-2" : ""
-            }`}
-          />
-        </button>
-      </div>
-
-      <div
-        className={`md:hidden fixed inset-0 top-16 bg-background/95 backdrop-blur-md transition-all duration-300 ${
-          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <nav className="flex flex-col items-center justify-center h-full gap-2 px-6">
-          {NAV_LINKS.map((link, index) => {
-            const sectionId = link.href.replace("#", "");
-            const isActive = activeSection === sectionId;
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                style={{ transitionDelay: isMenuOpen ? `${index * 60}ms` : "0ms" }}
-                className={`w-full max-w-xs text-center py-4 text-xl font-medium rounded-xl transition-all duration-300 ${
-                  isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                } ${
-                  isActive
-                    ? "text-accent bg-accent-glow"
-                    : "text-muted hover:text-foreground hover:bg-surface-elevated"
-                }`}
-              >
-                {link.label}
               </a>
             );
           })}
