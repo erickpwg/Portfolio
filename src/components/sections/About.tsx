@@ -12,9 +12,9 @@ const stats = [
 
 export function About() {
   return (
-    <section id="about" className="py-24 px-6">
+    <section id="about" className="py-16 md:py-24 px-6 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div className="flex flex-col gap-8">
             <SectionTitle
               label="About Me"
@@ -67,7 +67,7 @@ export function About() {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="flex flex-col items-center text-center p-6 rounded-xl bg-surface border border-border hover:border-accent/40 transition-colors duration-200"
+                  className="flex flex-col items-center text-center p-4 sm:p-6 rounded-xl bg-surface border border-border hover:border-accent/40 transition-colors duration-200"
                 >
                   <span className="text-3xl font-bold text-accent">{stat.value}</span>
                   <span className="text-xs text-muted mt-1 leading-tight">{stat.label}</span>

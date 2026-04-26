@@ -89,7 +89,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6 bg-surface/50">
+    <section id="contact" className="py-16 md:py-24 px-6 bg-surface/50 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
           label="Contact"

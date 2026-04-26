@@ -47,7 +47,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden scroll-mt-16"
     >
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -67,7 +67,7 @@ export function Hero() {
           </h1>
         </div>
 
-        <div className="h-10 flex items-center">
+        <div className="min-h-10 flex items-center">
           <span className="text-xl sm:text-2xl font-medium text-accent">
             {displayed}
             <span className="animate-pulse">|</span>

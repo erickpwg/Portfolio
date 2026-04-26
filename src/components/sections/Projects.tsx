@@ -8,7 +8,7 @@ import { PROJECTS } from "@/constants/projects";
 
 export function Projects() {
   return (
-    <section id="projects" className="py-24 px-6">
+    <section id="projects" className="py-16 md:py-24 px-6 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
           label="Projects"
