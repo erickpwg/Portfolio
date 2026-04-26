@@ -4,6 +4,7 @@ interface SectionTitleProps {
   label: string;
   title: string;
   description?: string;
+  description2?: string;
   align?: "left" | "center";
   className?: string;
 }
@@ -12,6 +13,7 @@ export function SectionTitle({
   label,
   title,
   description,
+  description2,
   align = "center",
   className,
 }: SectionTitleProps) {
@@ -31,6 +33,9 @@ export function SectionTitle({
       </h2>
       {description && (
         <p className="text-muted max-w-2xl leading-relaxed">{description}</p>
+      )}
+      {description2 && (
+        <p className="text-muted max-w-2xl leading-relaxed">{description2}</p>
       )}
     </div>
   );

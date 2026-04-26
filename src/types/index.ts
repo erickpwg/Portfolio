@@ -2,10 +2,10 @@ export interface Project {
   id: number;
   title: string;
   description: string;
+  impact: string;
   tags: string[];
   repoUrl: string;
   liveUrl?: string;
-  imageUrl?: string;
 }
 
 export interface Skill {

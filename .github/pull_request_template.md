@@ -16,12 +16,6 @@
 
 ---
 
-## 🚀 O que foi feito
-
-- 
-
----
-
 ## 🖥️ Testado em
 
 - [x] Desktop
