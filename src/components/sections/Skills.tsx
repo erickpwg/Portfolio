@@ -26,7 +26,7 @@ const iconLabel: Record<string, string> = {
 
 export function Skills() {
   return (
-    <section id="skills" className="py-24 px-6 bg-surface/50">
+    <section id="skills" className="py-16 md:py-24 px-6 bg-surface/50 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
           label="Tech Stack"
@@ -72,7 +72,7 @@ export function Skills() {
                     <span className="text-[10px] font-bold font-mono text-accent/70 w-7 text-center shrink-0 group-hover:text-accent transition-colors duration-150">
                       {iconLabel[skill.icon] ?? skill.icon.toUpperCase().slice(0, 3)}
                     </span>
-                    <span className="text-sm text-muted group-hover:text-foreground transition-colors duration-150 whitespace-nowrap">
+                    <span className="text-sm text-muted group-hover:text-foreground transition-colors duration-150">
                       {skill.name}
                     </span>
                   </li>
