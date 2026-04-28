@@ -4,27 +4,39 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { GitHubIcon, ExternalLinkIcon } from "@/components/ui/Icons";
-import { PROJECTS } from "@/constants/projects";
+import { PROJECTS, COMING_SOON } from "@/constants/projects";
+import { useLanguage } from "@/context/LanguageContext";
+import type { Project } from "@/types";
 
 export function Projects() {
+  const { t } = useLanguage();
+
+  const projects: Project[] = t.projects.items
+    .map((item) => {
+      const meta = PROJECTS.find((m) => m.id === item.id);
+      if (!meta) return null;
+      return { ...meta, ...item };
+    })
+    .filter((p): p is Project => p !== null);
+
   return (
     <section id="projects" className="py-16 md:py-24 px-6 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
-          label="Projects"
-          title="Building in public"
-          description="I am actively working on real-world projects involving chatbot automation, API integrations, and scalable web applications."
+          label={t.projects.label}
+          title={t.projects.title}
+          description={t.projects.description}
         />
 
-        {PROJECTS.length === 0 ? (
+        {COMING_SOON ? (
           <div className="flex items-center justify-center py-20 px-6 rounded-xl border border-dashed border-border">
             <p className="text-muted text-sm">
-              Projects will be available soon — stay tuned.
+              {t.projects.comingSoon}
             </p>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROJECTS.map((project) => (
+            {projects.map((project) => (
               <article
                 key={project.id}
                 className="flex flex-col bg-surface border border-border rounded-xl hover:border-accent/30 hover:-translate-y-1 transition-all duration-200 group overflow-hidden"
@@ -69,7 +81,7 @@ export function Projects() {
                   <div className="flex gap-2">
                     <span className="w-0.5 rounded-full bg-accent shrink-0 self-stretch" />
                     <p className="text-xs text-muted leading-relaxed">
-                      <span className="text-accent font-medium">Impact — </span>
+                      <span className="text-accent font-medium">{t.projects.impact} — </span>
                       {project.impact}
                     </p>
                   </div>
@@ -90,7 +102,7 @@ export function Projects() {
         <div className="flex justify-center">
           <Button href="https://github.com/erickpwg?tab=repositories" external variant="outline">
             <GitHubIcon className="w-4 h-4" />
-            See more on GitHub
+            {t.projects.seeMore}
           </Button>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SKILLS, CORE_STACK } from "@/constants/skills";
+import { useLanguage } from "@/context/LanguageContext";
 
 const iconLabel: Record<string, string> = {
   react: "Re",
@@ -25,18 +26,26 @@ const iconLabel: Record<string, string> = {
 };
 
 export function Skills() {
+  const { t } = useLanguage();
+
+  const skillsWithTranslations = SKILLS.map((group, i) => ({
+    ...group,
+    category: t.skills.categories[i]?.category ?? group.category,
+    subtitle: t.skills.categories[i]?.subtitle ?? group.subtitle,
+  }));
+
   return (
     <section id="skills" className="py-16 md:py-24 px-6 bg-surface/50 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
-          label="Tech Stack"
-          title="Stack & Technologies"
-          description="Technologies I use to design, build and ship full stack applications."
+          label={t.skills.label}
+          title={t.skills.title}
+          description={t.skills.description}
         />
 
         <div className="flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-muted text-center">
-            Core Stack
+            {t.skills.coreStack}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {CORE_STACK.map((tech) => (
@@ -51,7 +60,7 @@ export function Skills() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SKILLS.map((group) => (
+          {skillsWithTranslations.map((group) => (
             <div
               key={group.category}
               className="flex flex-col gap-5 p-6 rounded-xl bg-surface border border-border hover:border-accent/30 transition-colors duration-200"

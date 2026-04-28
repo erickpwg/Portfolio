@@ -4,13 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, ChevronDownIcon, GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import { SOCIAL_LINKS } from "@/constants/navigation";
-
-const roles = [
-  "Full Stack Engineer | Node.js • React • Next.js",
-  "Backend Engineer | APIs • Microservices • Node.js",
-  "Frontend Engineer | React • Next.js • UI/UX",
-  "Chatbot Engineer | Automation • AI • Integrations"
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
   github: GitHubIcon,
@@ -18,11 +12,19 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
 };
 
 export function Hero() {
+  const { lang, t } = useLanguage();
   const [currentRole, setCurrentRole] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    setCurrentRole(0);
+    setDisplayed("");
+    setIsDeleting(false);
+  }, [lang]);
+
+  useEffect(() => {
+    const roles = t.hero.roles;
     const full = roles[currentRole];
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -38,7 +40,7 @@ export function Hero() {
     }
 
     return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, currentRole]);
+  }, [displayed, isDeleting, currentRole, t.hero.roles]);
 
   const handleScrollDown = () => {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
@@ -57,11 +59,11 @@ export function Hero() {
       <div className="max-w-4xl w-full flex flex-col items-center text-center gap-6 animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-white/70 text-sm font-medium">
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          Available for opportunities
+          {t.hero.available}
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-muted text-lg">Hi, I&apos;m</p>
+          <p className="text-muted text-lg">{t.hero.greeting}</p>
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-foreground leading-tight tracking-tight">
             Erick Wagner
           </h1>
@@ -75,8 +77,7 @@ export function Hero() {
         </div>
 
         <p className="text-muted text-base sm:text-lg max-w-xl leading-relaxed">
-          I develop scalable applications using modern JavaScript technologies,
-           focusing on performance, maintainability, and user experience.
+          {t.hero.description}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-2">
@@ -88,7 +89,7 @@ export function Hero() {
             }}
             size="lg"
           >
-            View Projects
+            {t.hero.viewProjects}
             <ArrowRightIcon className="w-4 h-4" />
           </Button>
           <Button
@@ -100,7 +101,7 @@ export function Hero() {
             variant="outline"
             size="lg"
           >
-            Get in Touch
+            {t.hero.getInTouch}
           </Button>
         </div>
 
@@ -128,7 +129,7 @@ export function Hero() {
         aria-label="Scroll to about"
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted hover:text-accent transition-colors duration-200"
       >
-        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <span className="text-xs tracking-widest uppercase">{t.hero.scroll}</span>
         <ChevronDownIcon className="w-4 h-4 animate-bounce" />
       </button>
     </section>

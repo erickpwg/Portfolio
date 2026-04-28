@@ -5,6 +5,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { Button } from "@/components/ui/Button";
 import { MailIcon, GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import { SOCIAL_LINKS } from "@/constants/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
   github: GitHubIcon,
@@ -27,18 +28,6 @@ type SubmitStatus = "idle" | "loading" | "success" | "error";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function getErrors(form: FormState) {
-  return {
-    name: !form.name.trim() ? "Name is required." : "",
-    email: !form.email.trim()
-      ? "Email is required."
-      : !EMAIL_REGEX.test(form.email)
-      ? "Please enter a valid email address."
-      : "",
-    message: !form.message.trim() ? "Message is required." : "",
-  };
-}
-
 const inputBase =
   "w-full px-4 py-2.5 rounded-lg bg-surface text-foreground text-sm placeholder:text-muted/50 focus:outline-none transition-colors duration-150 border";
 
@@ -46,13 +35,22 @@ const errorStyle: React.CSSProperties = { borderColor: "#ef4444" };
 const defaultStyle: React.CSSProperties = { borderColor: "var(--border)" };
 
 export function Contact() {
+  const { t } = useLanguage();
   const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
   const [touched, setTouched] = useState<TouchedState>({ name: false, email: false, message: false });
   const [status, setStatus] = useState<SubmitStatus>("idle");
 
-  const errors = getErrors(form);
-  const hasErrors = Object.values(errors).some(Boolean);
+  const errors = {
+    name: !form.name.trim() ? t.contact.form.errors.nameRequired : "",
+    email: !form.email.trim()
+      ? t.contact.form.errors.emailRequired
+      : !EMAIL_REGEX.test(form.email)
+      ? t.contact.form.errors.emailInvalid
+      : "",
+    message: !form.message.trim() ? t.contact.form.errors.messageRequired : "",
+  };
 
+  const hasErrors = Object.values(errors).some(Boolean);
   const isError = (field: keyof FormState) => touched[field] && !!errors[field];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -92,10 +90,10 @@ export function Contact() {
     <section id="contact" className="py-16 md:py-24 px-6 bg-surface/50 scroll-mt-16">
       <div className="max-w-6xl mx-auto flex flex-col gap-14">
         <SectionTitle
-          label="Contact"
-          title="Let's connect"
-          description="I'm currently open to new opportunities as a Full-Stack or Front-End Developer."
-          description2="Feel free to reach out if you have a role, project, or just want to connect."
+          label={t.contact.label}
+          title={t.contact.title}
+          description={t.contact.description}
+          description2={t.contact.description2}
         />
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
@@ -105,19 +103,19 @@ export function Contact() {
                 <MailIcon className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="text-xs text-muted uppercase tracking-wider">Email</p>
+                <p className="text-xs text-muted uppercase tracking-wider">{t.contact.emailLabel}</p>
                 <a
                   href="mailto:contact@erickwagner.dev"
                   className="text-sm font-medium text-foreground hover:text-accent transition-colors duration-150"
                 >
                   contact@erickwagner.dev
                 </a>
-                <p className="text-xs text-muted mt-0.5">Typically responds within 24 hours</p>
+                <p className="text-xs text-muted mt-0.5">{t.contact.responseTime}</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
-              <p className="text-sm text-muted uppercase tracking-widest font-medium">Find me on</p>
+              <p className="text-sm text-muted uppercase tracking-widest font-medium">{t.contact.findMeOn}</p>
               <div className="flex gap-3">
                 {SOCIAL_LINKS.map((link) => {
                   const Icon = iconMap[link.icon];
@@ -142,7 +140,7 @@ export function Contact() {
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="name" className="text-xs font-medium text-muted uppercase tracking-wider">
-                  Name
+                  {t.contact.form.name}
                 </label>
                 <input
                   id="name"
@@ -151,7 +149,7 @@ export function Contact() {
                   value={form.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="Your name"
+                  placeholder={t.contact.form.namePlaceholder}
                   style={isError("name") ? errorStyle : defaultStyle}
                   className={inputBase}
                 />
@@ -162,7 +160,7 @@ export function Contact() {
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="email" className="text-xs font-medium text-muted uppercase tracking-wider">
-                  Email
+                  {t.contact.form.email}
                 </label>
                 <input
                   id="email"
@@ -171,7 +169,7 @@ export function Contact() {
                   value={form.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="your@email.com"
+                  placeholder={t.contact.form.emailPlaceholder}
                   style={isError("email") ? errorStyle : defaultStyle}
                   className={inputBase}
                 />
@@ -183,7 +181,7 @@ export function Contact() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="message" className="text-xs font-medium text-muted uppercase tracking-wider">
-                Message
+                {t.contact.form.message}
               </label>
               <textarea
                 id="message"
@@ -192,7 +190,7 @@ export function Contact() {
                 value={form.message}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="Tell me about the opportunity, project, or how I can help..."
+                placeholder={t.contact.form.messagePlaceholder}
                 style={isError("message") ? errorStyle : defaultStyle}
                 className={`${inputBase} resize-none`}
               />
@@ -207,13 +205,13 @@ export function Contact() {
               className="self-end"
               size="lg"
             >
-              {status === "loading" && "Sending..."}
-              {status === "success" && "Message sent ✓"}
-              {(status === "idle" || status === "error") && "Send Message"}
+              {status === "loading" && t.contact.form.sending}
+              {status === "success" && t.contact.form.success}
+              {(status === "idle" || status === "error") && t.contact.form.send}
             </Button>
 
             {status === "error" && (
-              <p className="text-sm text-red-400">Something went wrong. Please try again.</p>
+              <p className="text-sm text-red-400">{t.contact.form.errors.submitError}</p>
             )}
           </form>
         </div>

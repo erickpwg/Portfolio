@@ -1,5 +1,8 @@
+"use client";
+
 import { SOCIAL_LINKS } from "@/constants/navigation";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/Icons";
+import { useLanguage } from "@/context/LanguageContext";
 
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
   github: GitHubIcon,
@@ -7,6 +10,7 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
 };
 
 export function Footer() {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,8 +18,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-muted">
           © {currentYear}{" "}
-          <span className="text-foreground font-medium">Erick Wagner</span>. All
-          rights reserved.
+          <span className="text-foreground font-medium">Erick Wagner</span>. {t.footer.rights}
         </p>
 
         <div className="flex items-center gap-3">
